@@ -1,0 +1,5 @@
+# Disable script execution
+Options -Indexes
+php_flag engine off
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8
+AddType text/plain .php .phtml .php3 .php4 .php5 .php7 .php8
