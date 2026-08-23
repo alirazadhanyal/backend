@@ -1,18 +1,13 @@
-FROM php:8.1-apache
+FROM php:8.1-cli
 
-# Install PDO MySQL driver
+# Install PDO MySQL driver for TiDB connection
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Enable Apache Mod_Rewrite
-RUN a2enmod rewrite
-
-# Copy project files
-COPY . /var/www/html/
-
 # Set working directory
-WORKDIR /var/www/html/
+WORKDIR /var/www/html
 
-# Fix Apache port to listen to Railway's dynamic PORT
-RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+# Copy all project files
+COPY . .
 
-EXPOSE 8080
+# Start PHP built-in web server with dynamic PORT binding
+CMD php -S 0.0.0.0:${PORT:-8080}
