@@ -1,13 +1,13 @@
-FROM php:8.1-cli
+FROM php:8.1-apache
 
-# Install PDO MySQL driver for TiDB
+# Install PDO MySQL extension for TiDB
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Set working directory
-WORKDIR /var/www/html
+# Enable Apache rewrite module
+RUN a2enmod rewrite
 
-# Copy project files
-COPY . .
+# Copy all project files into Apache web root
+COPY . /var/www/html/
 
-# PHP Server using Railway's default internal PORT
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080}"]
+# Expose standard web port
+EXPOSE 80
