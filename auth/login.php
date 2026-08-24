@@ -15,17 +15,24 @@ function jsonResponse($data, $statusCode = 200) {
     exit();
 }
 
-// Direct include from api folder
-require_once __DIR__ . '/../api/db.php';
+// Direct Database Connection (No external file dependency)
+$host = getenv('DB_HOST');
+$port = getenv('DB_PORT') ?: '4000';
+$db   = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
 
-if (!isset($conn) && isset($pdo)) {
-    $conn = $pdo;
+try {
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::MYSQL_ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::MYSQL_ATTR_SSL_CA => true,
+    ]);
+} catch (PDOException $e) {
+    jsonResponse(["status" => "error", "message" => "Database Connection Failed: " . $e->getMessage()], 500);
 }
 
-if (!isset($conn) || $conn === null) {
-    jsonResponse(["status" => "error", "message" => "Database object \$conn is null."], 500);
-}
-
+// Get Request Body
 $data = json_decode(file_get_contents("php://input"));
 $ip_address = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 
