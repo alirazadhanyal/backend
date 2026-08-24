@@ -1,6 +1,5 @@
 <?php
 include_once __DIR__ . '/../api/db.php';
-
 $data = json_decode(file_get_contents("php://input"));
 
 $ip_address = $_SERVER['REMOTE_ADDR'];
