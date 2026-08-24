@@ -1,13 +1,16 @@
-FROM php:8.1-apache
+FROM php:8.1-cli
 
-# Install PDO MySQL extension for TiDB
+# Install PDO MySQL driver for TiDB
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Enable Apache rewrite module
-RUN a2enmod rewrite
+# Set working directory
+WORKDIR /var/www/html
 
-# Copy all project files into Apache web root
-COPY . /var/www/html/
+# Copy all repository files into container
+COPY . .
 
-# Expose standard web port
-EXPOSE 80
+# Expose port 8080
+EXPOSE 8080
+
+# Run PHP built-in server pointing to container root
+CMD ["php", "-S", "0.0.0.0:8080"]
