@@ -1,16 +1,16 @@
 FROM php:8.1-cli
 
-# Install PDO MySQL driver for TiDB
+# Install PDO MySQL extension for TiDB
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /var/www/html
 
-# Copy all repository files into container
+# Copy all project files
 COPY . .
 
-# Expose port 8080
+# Expose Railway container port
 EXPOSE 8080
 
-# Run PHP built-in server pointing to container root
+# Run lightweight PHP Built-in Server
 CMD ["php", "-S", "0.0.0.0:8080"]
