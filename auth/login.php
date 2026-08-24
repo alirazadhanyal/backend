@@ -87,3 +87,4 @@ if (!empty($data->email) && !empty($data->password)) {
     jsonResponse(["status" => "error", "message" => "Incomplete data."], 400);
 }
 ?>
+
